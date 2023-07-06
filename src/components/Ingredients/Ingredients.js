@@ -25,6 +25,10 @@ const Ingredients = () => {
       });
   }, []);
 
+  useEffect(() => {
+    console.log("RENDERING INGREDIENTS", userIngredients);
+  }, [userIngredients]);
+
   const addIngredientHandler = (ingredient) => {
     fetch(
       "https://react-hook-ingredients-ba1dd-default-rtdb.asia-southeast1.firebasedatabase.app/ingredients.json",

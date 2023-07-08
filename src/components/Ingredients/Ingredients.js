@@ -29,6 +29,10 @@ const Ingredients = () => {
     console.log("RENDERING INGREDIENTS", userIngredients);
   }, [userIngredients]);
 
+  const filteredIngredientsHandler = filterIngredients => {
+    setUserIngredients(filterIngredients);
+  }
+
   const addIngredientHandler = (ingredient) => {
     fetch(
       "https://react-hook-ingredients-ba1dd-default-rtdb.asia-southeast1.firebasedatabase.app/ingredients.json",
@@ -60,7 +64,7 @@ const Ingredients = () => {
       <IngredientForm onAddIngredient={addIngredientHandler} />
 
       <section>
-        <Search />
+        <Search onLoadIngredients={filteredIngredientsHandler} />
         <IngredientList
           ingredients={userIngredients}
           onRemoveItem={removeIngredientHandler}

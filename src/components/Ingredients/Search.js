@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import Card from "../UI/Card";
 import "./Search.css";
@@ -11,7 +11,7 @@ const Search = React.memo((props) => {
     const query =
       enteredFilter.length === 0
         ? ""
-        : `?orderBy="title"& equalTo="${enteredFilter}"`;
+        : `?orderBy="title"&equalTo="${enteredFilter}"`;
     fetch(
       "https://react-hook-ingredients-ba1dd-default-rtdb.asia-southeast1.firebasedatabase.app/ingredients.json" +
         query

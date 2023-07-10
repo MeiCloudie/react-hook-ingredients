@@ -21,7 +21,8 @@ const ingredientReducer = (currentIngredients, action) => {
 
 const Ingredients = () => {
   const [userIngredients, dispatch] = useReducer(ingredientReducer, []);
-  const { isLoading, error, data, sendRequest } = useHttp();
+  const { isLoading, error, data, sendRequest, reqExtra, reqIdentifier } =
+    useHttp();
 
   // const [userIngredients, setUserIngredients] = useState([]);
   // const [isLoading, setIsLoading] = useState(false);
@@ -46,8 +47,16 @@ const Ingredients = () => {
   // }, []);
 
   useEffect(() => {
-    console.log("RENDERING INGREDIENTS", userIngredients);
-  }, [userIngredients]);
+    // console.log("RENDERING INGREDIENTS", userIngredients);
+    if (!isLoading && !error && reqIdentifier === "REMOVE_INGREDIENT") {
+      dispatch({ type: "DELETE", id: reqExtra });
+    } else if (!isLoading && !error && reqIdentifier === "ADD_INGREDIENT") {
+      dispatch({
+        type: "ADD",
+        ingredient: { id: data.name, ...reqExtra },
+      });
+    }
+  }, [data, reqExtra, reqIdentifier, isLoading, error]);
 
   const filteredIngredientsHandler = useCallback((filteredIngredients) => {
     // setUserIngredients(filteredIngredients);
@@ -55,6 +64,13 @@ const Ingredients = () => {
   }, []);
 
   const addIngredientHandler = useCallback((ingredient) => {
+    sendRequest(
+      "https://react-hook-ingredients-ba1dd-default-rtdb.asia-southeast1.firebasedatabase.app/ingredients.json",
+      "POST",
+      JSON.stringify(ingredient),
+      ingredient,
+      "ADD_INGREDIENT"
+    );
     // setIsLoading(true);
     // dispatchHttp({ type: "SEND" });
     // fetch(
@@ -87,7 +103,10 @@ const Ingredients = () => {
       // dispatchHttp({ type: "SEND" });
       sendRequest(
         `https://react-hook-ingredients-ba1dd-default-rtdb.asia-southeast1.firebasedatabase.app/ingredients/${ingredientId}.json`,
-        "DELETE"
+        "DELETE",
+        null,
+        ingredientId,
+        "REMOVE_INGREDIENT"
       );
     },
     [sendRequest]
